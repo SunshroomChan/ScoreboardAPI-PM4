@@ -1,6 +1,6 @@
 # ScoreboardAPI
 [![Discord](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/tZQMhBQ)
-[![Poggit-Ci](https://poggit.pmmp.io/ci.shield/SunshroomChan/ScoreboardAPI/ScoreboardAPI)](https://poggit.pmmp.io/ci/SunshroomChan/ScoreboardAPI/ScoreboardAPI)
+[![Poggit-Ci](https://poggit.pmmp.io/ci.shield/SunshroomChan/ScoreboardAPI-PM4/ScoreboardAPI)](https://poggit.pmmp.io/ci/SunshroomChan/ScoreboardAPI-PM4/ScoreboardAPI)
 [![Download count](https://poggit.pmmp.io/shield.dl.total/ScoreboardAPI)](https://poggit.pmmp.io/p/ScoreboardAPI)
 
 ## Basic API
