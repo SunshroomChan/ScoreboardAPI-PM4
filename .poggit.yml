@@ -3,6 +3,7 @@ build-by-default: true
 branches:
 - master
 projects:
-  ScoreboardAPI:
+  ScoreboardAPI-PM4:
     path: ""
+    icon: icon.png
 ...
