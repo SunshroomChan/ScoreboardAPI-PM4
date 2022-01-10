@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace jasonwynn10\ScoreboardAPI;
 
 use pocketmine\network\mcpe\protocol\SetScorePacket;
-use pocketmine\Player;
+use pocketmine\player\Player;
 use pocketmine\Server;
 
 class Scoreboard {
@@ -113,21 +113,17 @@ class Scoreboard {
 		$pk->entries[] = $data;
 		if(!empty($players)) {
 			foreach($players as $player) {
-				if(!isset($this->entryViewers[$data->objectiveName ?? $data->entityUniqueId]))
-					continue;
-				$key = array_search($player->getName(), $this->entryViewers[$data->objectiveName ?? $data->entityUniqueId]);
+				$key = array_search($player->getName(), $this->entryViewers[$data->customName ?? $data->entityUniqueId]);
 				if($key !== false) {
-					unset($this->entryViewers[$data->objectiveName ?? $data->entityUniqueId][$key]);
+					unset($this->entryViewers[$data->customName ?? $data->entityUniqueId][$key]);
 				}
 				$player->sendDataPacket($pk);
 			}
 		}else {
 			foreach(ScoreboardAPI::getInstance()->getScoreboardViewers($this) as $player) {
-				if(!isset($this->entryViewers[$data->objectiveName ?? $data->entityUniqueId]))
-					continue;
-				$key = array_search($player->getName(), $this->entryViewers[$data->objectiveName ?? $data->entityUniqueId]);
+				$key = array_search($player->getName(), $this->entryViewers[$data->customName ?? $data->entityUniqueId]);
 				if($key !== false) {
-					unset($this->entryViewers[$data->objectiveName ?? $data->entityUniqueId][$key]);
+					unset($this->entryViewers[$data->customName ?? $data->entityUniqueId][$key]);
 				}
 				$player->sendDataPacket($pk);
 			}
@@ -164,7 +160,7 @@ class Scoreboard {
 
 		if(!empty($players)) {
 			foreach($players as $player) {
-				$player->sendDataPacket($pk);
+				$player->getNetworkSession()->sendDataPacket($pk);
 			}
 		}else {
 			foreach(ScoreboardAPI::getInstance()->getScoreboardViewers($this) as $player) {
@@ -178,7 +174,6 @@ class Scoreboard {
 	 * Automatically pads any custom text entries according to score digit count
 	 */
 	public function padEntries() : void {
-		/** @var ScoreboardEntry[] $entries */
 		$entries = [];
 		$maxSpaces = 1;
 		foreach($this->entries as $entry) {
@@ -193,7 +188,7 @@ class Scoreboard {
 			$this->removeEntry($entry);
 		}
 		foreach($entries as $entry) {
-			if($entry->customName[(strlen($entry->customName)-1)] !== " ") {
+			if($entry->customName[strlen($entry->customName)] !== " ") {
 				$entry->customName = str_pad($entry->customName, $maxSpaces - strlen((string)$entry->score));
 			}
 			$this->addEntry($entry);
@@ -304,10 +299,8 @@ class Scoreboard {
 	 */
 	public function getEntryViewers(ScoreboardEntry $entry) : array {
 		$return = [];
-		if(!isset($this->entryViewers[$entry->objectiveName ?? $entry->entityUniqueId]))
-			return [];
-		foreach($this->entryViewers[$entry->objectiveName ?? $entry->entityUniqueId] as $name) {
-			$player = Server::getInstance()->getPlayerExact($name);
+		foreach($this->entryViewers[$entry->customName ?? $entry->entityUniqueId] as $name) {
+			$player = Server::getInstance()->getPlayer($name);
 			if($player !== null) {
 				$return[] = $player;
 			}
