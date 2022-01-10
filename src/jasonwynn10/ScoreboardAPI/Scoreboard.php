@@ -80,12 +80,12 @@ class Scoreboard {
 		if(!empty($players)) {
 			foreach($players as $player) {
 				$this->entryViewers[$data->objectiveName ?? $data->entityUniqueId][] = $player->getName();
-				$player->sendDataPacket($pk);
+				$player->getNetworkSession()->sendDataPacket($pk);
 			}
 		}else {
 			foreach(ScoreboardAPI::getInstance()->getScoreboardViewers($this) as $player) {
 				$this->entryViewers[$data->objectiveName ?? $data->entityUniqueId][] = $player->getName();
-				$player->sendDataPacket($pk);
+				$player->getNetworkSession()->sendDataPacket($pk);
 			}
 		}
 		return $this;
@@ -117,7 +117,7 @@ class Scoreboard {
 				if($key !== false) {
 					unset($this->entryViewers[$data->customName ?? $data->entityUniqueId][$key]);
 				}
-				$player->sendDataPacket($pk);
+				$player->getNetworkSession()->sendDataPacket($pk);
 			}
 		}else {
 			foreach(ScoreboardAPI::getInstance()->getScoreboardViewers($this) as $player) {
@@ -125,7 +125,7 @@ class Scoreboard {
 				if($key !== false) {
 					unset($this->entryViewers[$data->customName ?? $data->entityUniqueId][$key]);
 				}
-				$player->sendDataPacket($pk);
+				$player->getNetworkSession()->sendDataPacket($pk);
 			}
 		}
 		return $this;
@@ -164,7 +164,7 @@ class Scoreboard {
 			}
 		}else {
 			foreach(ScoreboardAPI::getInstance()->getScoreboardViewers($this) as $player) {
-				$player->sendDataPacket($pk);
+				$player->getNetworkSession()->sendDataPacket($pk);
 			}
 		}
 		return $this;
@@ -300,7 +300,7 @@ class Scoreboard {
 	public function getEntryViewers(ScoreboardEntry $entry) : array {
 		$return = [];
 		foreach($this->entryViewers[$entry->customName ?? $entry->entityUniqueId] as $name) {
-			$player = Server::getInstance()->getPlayer($name);
+			$player = Server::getInstance()->getPlayerByPrefix($name);
 			if($player !== null) {
 				$return[] = $player;
 			}

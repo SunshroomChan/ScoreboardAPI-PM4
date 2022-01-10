@@ -82,7 +82,7 @@ class ScoreboardAPI extends PluginBase implements Listener {
 	public function getScoreboardViewers(Scoreboard $scoreboard) : array {
 		$return = [];
 		foreach($this->scoreboardViewers[$scoreboard->getObjectiveName()] as $name) {
-			$player = $this->getServer()->getPlayer($name);
+			$player = $this->getServer()->getPlayerByPrefix($name);
 			if($player !== null) {
 				$return[] = $player;
 			}
